@@ -1,0 +1,45 @@
+{
+  "player": {
+    "x": 45,
+    "y": 0,
+    "width": 45,
+    "height": 45,
+    "dx": 20,
+    "dy": 0,
+    "speed": 1,
+    "maxSpeed": 1.5,
+    "jumpForce": -4,
+    "gravity": 0.07,
+    "friction": 0.85,
+    "onGround": false
+  },
+  "enemy-grunt-1": {
+    "x": 45,
+    "y": 0,
+    "width": 30,
+    "height": 45,
+    "dx": 0,
+    "dy": 0,
+    "speed": 1,
+    "maxSpeed": 1.5,
+    "jumpForce": -5,
+    "gravity": 0.09,
+    "jumpCooldown": 0,
+    "friction": 0.85,
+    "onGround": false
+  },
+  "enemy-boss-1": {
+    "x": 45,
+    "y": 0,
+    "width": 45,
+    "height": 45,
+    "dx": 0,
+    "dy": 0,
+    "speed": 0.3,
+    "maxSpeed": 1.5,
+    "jumpForce": -5,
+    "gravity": 0.09,
+    "friction": 0.85,
+    "onGround": false
+  }
+}
