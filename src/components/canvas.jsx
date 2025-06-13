@@ -5,7 +5,9 @@ import characters from "../configurations/characters.json"
 const tileSize = 50
 const keys = {}
 
-const ANIM_PATH = "assets/characters/test-hero/Animations/"
+const ANIM_PATH = `${
+  import.meta.env.BASE_URL
+}assets/characters/test-hero/Animations/`
 const SPRITES = {
   idle: {
     src: ANIM_PATH + "hero-idle.png",
@@ -34,7 +36,9 @@ const SPRITES = {
 }
 
 // --- ENEMY SPRITES ---
-const ENEMY_ANIM_PATH = "assets/characters/test-hero/Animations/"
+const ENEMY_ANIM_PATH = `${
+  import.meta.env.BASE_URL
+}assets/characters/test-hero/Animations/`
 const ENEMY_SPRITES = {
   run: {
     src: ENEMY_ANIM_PATH + "grunt.png", // update path as needed
@@ -136,8 +140,9 @@ export default function GameCanvas() {
     }
 
     // Load wall and background images
-    wallImage.current.src = levels.world1.ground
-    backgroundImage.current.src = levels.world1.background
+    wallImage.current.src = import.meta.env.BASE_URL + levels.world1.ground
+    backgroundImage.current.src =
+      import.meta.env.BASE_URL + levels.world1.background
 
     const canvas = canvasRef.current
     const ctx = canvas.getContext("2d")
