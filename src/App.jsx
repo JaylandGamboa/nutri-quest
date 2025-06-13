@@ -14,6 +14,6 @@ export default function App() {
       onQuit={() => window.close()}
     />
   ) : (
-    <GameCanvas />
+    <GameCanvas style='{ width: 100%;}' />
   )
 }
