@@ -658,7 +658,7 @@ export default function GameCanvas() {
       {/* --- MUSIC CONTROLS --- */}
       <audio
         ref={audioRef}
-        src='assets/music/level-background/cyborg-ninja-kevin-macleod-main-version-7993-03-00.mp3'
+        src='assets/music/level-background/cyborg-ninja.mp3'
         loop
         autoPlay
       />
