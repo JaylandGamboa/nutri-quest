@@ -1,7 +1,7 @@
 {
   "world1": {
-    "background": "/assets/Industrial-01/2-Background/Background.png",
-    "ground": "/assets/Industrial-01/1-Tiles/IndustrialTile_64.png",
+    "background": "assets/Industrial-01/2-Background/Background.png",
+    "ground": "assets/Industrial-01/1-Tiles/IndustrialTile_64.png",
     "wall": "",
     "clear": false,
     "boss": "level3",

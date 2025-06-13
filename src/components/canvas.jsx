@@ -5,7 +5,7 @@ import characters from "../configurations/characters.json"
 const tileSize = 50
 const keys = {}
 
-const ANIM_PATH = "/assets/characters/test-hero/Animations/"
+const ANIM_PATH = "assets/characters/test-hero/Animations/"
 const SPRITES = {
   idle: {
     src: ANIM_PATH + "hero-idle.png",
@@ -34,7 +34,7 @@ const SPRITES = {
 }
 
 // --- ENEMY SPRITES ---
-const ENEMY_ANIM_PATH = "/assets/characters/test-hero/Animations/"
+const ENEMY_ANIM_PATH = "assets/characters/test-hero/Animations/"
 const ENEMY_SPRITES = {
   run: {
     src: ENEMY_ANIM_PATH + "grunt.png", // update path as needed
@@ -658,7 +658,7 @@ export default function GameCanvas() {
       {/* --- MUSIC CONTROLS --- */}
       <audio
         ref={audioRef}
-        src='/assets/music/level-background/cyborg-ninja.mp3'
+        src='assets/music/level-background/cyborg-ninja-kevin-macleod-main-version-7993-03-00.mp3'
         loop
         autoPlay
       />
