@@ -54,7 +54,7 @@ const ENEMY_SPRITES = {
   },
 }
 
-export default function GameCanvas() {
+export default function GameCanvas(props) {
   const canvasRef = useRef()
   const wallImage = useRef(new Image())
   const backgroundImage = useRef(new Image())
@@ -357,7 +357,7 @@ export default function GameCanvas() {
             if (newCount >= totalCollectibles) {
               gameWon.current = true
               setTimeout(() => {
-                alert("🏆 You Win!")
+                if (typeof props.onWin === "function") props.onWin()
               }, 100)
             }
             return newCount
@@ -469,7 +469,7 @@ export default function GameCanvas() {
             const newHealth = prevHealth - 1
             if (newHealth <= 0) {
               gameOver.current = true
-              alert("💀 Game Over!")
+              if (typeof props.onLose === "function") props.onLose()
             }
             return newHealth
           })
@@ -616,6 +616,12 @@ export default function GameCanvas() {
       draw()
       if (!gameOver.current && !gameWon.current) {
         requestAnimationFrame(loop)
+      }
+      if (playerHasWon) {
+        if (typeof props.onWin === "function") props.onWin()
+      }
+      if (playerHasLost) {
+        if (typeof props.onLose === "function") props.onLose()
       }
     }
 
