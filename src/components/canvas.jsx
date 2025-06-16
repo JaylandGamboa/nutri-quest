@@ -35,19 +35,18 @@ const SPRITES = {
   },
 }
 
-// --- ENEMY SPRITES ---
 const ENEMY_ANIM_PATH = `${
   import.meta.env.BASE_URL
 }assets/characters/test-hero/Animations/`
 const ENEMY_SPRITES = {
   run: {
-    src: ENEMY_ANIM_PATH + "grunt.png", // update path as needed
+    src: ENEMY_ANIM_PATH + "grunt.png",
     frames: 2,
     frameWidth: 50,
     frameHeight: 50,
   },
   idle: {
-    src: ENEMY_ANIM_PATH + "grunt.png", // update path as needed
+    src: ENEMY_ANIM_PATH + "grunt.png",
     frames: 1,
     frameWidth: 50,
     frameHeight: 50,
@@ -71,13 +70,11 @@ export default function GameCanvas(props) {
     jump: new window.Image(),
     shoot: new window.Image(),
   })
-  // Enemy animation images
   const enemySpriteImages = useRef({
     run: new window.Image(),
     idle: new window.Image(),
   })
 
-  // Animation state
   const playerAnim = useRef({
     state: "idle",
     frame: 0,
@@ -85,12 +82,14 @@ export default function GameCanvas(props) {
     speed: 8,
   })
 
-  const [currentLevelIndex] = useState(0)
-  const levelKeys = Object.keys(levels.world1).filter((key) =>
-    key.startsWith("level")
-  )
-  const currentLevelKey = levelKeys[currentLevelIndex]
-  const level = levels.world1[currentLevelKey]
+  // --- USE SELECTED WORLD AND LEVEL ---
+  const world = props.world || "world1"
+  const levelKey = props.levelKey || "level1"
+  const level = levels[world][levelKey]
+
+  // Get enemy count for this level from levels.json
+  const spawnEnemyKey = `spawnEnemy-${levelKey}`
+  const ENEMY_COUNT = levels[world][spawnEnemyKey] || 2 // fallback to 2
 
   const [playerHealth, setPlayerHealth] = useState(3)
   const [collectedCount, setCollectedCount] = useState(0)
@@ -103,15 +102,12 @@ export default function GameCanvas(props) {
   const projectiles = useRef([])
   const collectibles = useRef([])
 
-  // For shooting animation
   const shooting = useRef(false)
   const shootingTimer = useRef(0)
   const SHOOT_ANIM_DURATION = 10
 
-  // Multiple enemies
   const enemies = useRef([])
 
-  // --- Music effect ---
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.muted = isMuted
@@ -134,15 +130,13 @@ export default function GameCanvas(props) {
     for (const key in SPRITES) {
       spriteImages.current[key].src = SPRITES[key].src
     }
-    // Load enemy sprite images
     for (const key in ENEMY_SPRITES) {
       enemySpriteImages.current[key].src = ENEMY_SPRITES[key].src
     }
 
-    // Load wall and background images
-    wallImage.current.src = import.meta.env.BASE_URL + levels.world1.ground
+    wallImage.current.src = import.meta.env.BASE_URL + levels[world].ground
     backgroundImage.current.src =
-      import.meta.env.BASE_URL + levels.world1.background
+      import.meta.env.BASE_URL + levels[world].background
 
     const canvas = canvasRef.current
     const ctx = canvas.getContext("2d")
@@ -156,7 +150,6 @@ export default function GameCanvas(props) {
     const p = { ...characters.player, facing: 1 }
 
     // --- Multiple Enemies ---
-    const ENEMY_COUNT = 2
     function spawnEnemy() {
       const enemyData = characters["enemy-grunt-1"]
       let x, y
@@ -265,7 +258,6 @@ export default function GameCanvas(props) {
         moveX(e)
         moveY(e)
       }
-      // --- Enemy Animation Update ---
       for (let e of enemies.current) {
         if (!e.alive) continue
         e.facing = e.dx < 0 ? -1 : 1
@@ -319,7 +311,8 @@ export default function GameCanvas(props) {
       }
       projectiles.current = newProjectiles
     }
-    const collectibleImages = levels.world1["collectibles-1-images"]
+
+    const collectibleImages = levels[world]["collectibles-1-images"]
     function spawnCollectibles(count = 5) {
       const items = []
       while (items.length < count) {
@@ -436,13 +429,11 @@ export default function GameCanvas(props) {
           item.dy += gravity
           item.y += item.dy
 
-          // Check if landed on ground
           const left = item.x
           const right = item.x + item.width
           const bottom = item.y + item.height
 
           if (isSolid(left, bottom) || isSolid(right, bottom)) {
-            // Snap to ground
             item.y = Math.floor(bottom / tileSize) * tileSize - item.height
             item.dy = 0
             item.onGround = true
@@ -450,11 +441,9 @@ export default function GameCanvas(props) {
         }
       }
 
-      // Animation state logic
       updatePlayerAnimState()
       updatePlayerAnimFrame()
 
-      // Shooting animation timer
       if (shooting.current) {
         shootingTimer.current--
         if (shootingTimer.current <= 0) {
@@ -462,7 +451,6 @@ export default function GameCanvas(props) {
         }
       }
 
-      // Player collision with any enemy
       for (let e of enemies.current) {
         if (e.alive && checkCollision(p, e) && damageCooldown.current === 0) {
           setPlayerHealth((prevHealth) => {
@@ -484,7 +472,6 @@ export default function GameCanvas(props) {
 
     function draw() {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
-      // Draw background first
       ctx.drawImage(
         backgroundImage.current,
         0,
@@ -545,14 +532,14 @@ export default function GameCanvas(props) {
       }
       ctx.restore()
 
-      // --- Enemy sprite animation ---
+      // Enemy sprite animation
       for (let e of enemies.current) {
         if (!e.alive) continue
         const enemyState = e.anim.state
         const enemyFrame = e.anim.frame
         const enemyImg = enemySpriteImages.current[enemyState]
         const enemySpriteData = ENEMY_SPRITES[enemyState]
-        if (!enemyImg || !enemySpriteData) continue // <-- Add this line
+        if (!enemyImg || !enemySpriteData) continue
         const { frameWidth: enemyFrameWidth, frameHeight: enemyFrameHeight } =
           enemySpriteData
         ctx.save()
@@ -586,13 +573,11 @@ export default function GameCanvas(props) {
         ctx.restore()
       }
 
-      // Projectiles
       ctx.fillStyle = "yellow"
       for (let proj of projectiles.current) {
         ctx.fillRect(proj.x, proj.y, proj.width, proj.height)
       }
 
-      // Collectibles
       for (let item of collectibles.current) {
         if (item.img && item.img.complete) {
           ctx.drawImage(item.img, item.x, item.y, item.width, item.height)
@@ -605,7 +590,6 @@ export default function GameCanvas(props) {
             0,
             Math.PI * 2
           )
-
           ctx.fill()
         }
       }
@@ -617,21 +601,13 @@ export default function GameCanvas(props) {
       if (!gameOver.current && !gameWon.current) {
         requestAnimationFrame(loop)
       }
-      if (playerHasWon) {
-        if (typeof props.onWin === "function") props.onWin()
-      }
-      if (playerHasLost) {
-        if (typeof props.onLose === "function") props.onLose()
-      }
     }
 
-    // Wait for all images to load before starting
     let imagesLoaded = 0
     const totalImages =
       2 + Object.keys(SPRITES).length + Object.keys(ENEMY_SPRITES).length
     function tryStart() {
       imagesLoaded++
-      console.log("Image loaded", imagesLoaded, "of", totalImages)
       if (imagesLoaded === totalImages) {
         spawnCollectibles(5)
         loop()
@@ -662,11 +638,37 @@ export default function GameCanvas(props) {
       window.removeEventListener("keydown", handleKeyDown)
       window.removeEventListener("keyup", handleKeyUp)
     }
-  }, [])
+  }, [world, levelKey])
 
   return (
-    <div style={{ textAlign: "center", marginTop: "20px" }}>
-      {/* --- MUSIC CONTROLS --- */}
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#222",
+      }}
+    >
+      <button
+        onClick={props.onMenu}
+        style={{
+          position: "absolute",
+          top: 20,
+          right: 20,
+          zIndex: 10,
+          padding: "8px 18px",
+          fontSize: "1em",
+          borderRadius: "6px",
+          background: "#333",
+          color: "#fff",
+          border: "1px solid #888",
+          cursor: "pointer",
+        }}
+      >
+        Menu
+      </button>
       <audio
         ref={audioRef}
         src='assets/music/level-background/cyborg-ninja.mp3'
@@ -697,8 +699,6 @@ export default function GameCanvas(props) {
           style={{ marginLeft: 10, verticalAlign: "middle" }}
         />
       </div>
-      {/* --- END MUSIC CONTROLS --- */}
-
       <div
         style={{
           marginBottom: "10px",
@@ -720,11 +720,9 @@ export default function GameCanvas(props) {
           }}
         />
       </div>
-
       <p style={{ color: "#fff" }}>
         Food : {collectedCount} / {totalCollectibles}
       </p>
-
       <canvas
         ref={canvasRef}
         style={{
@@ -732,6 +730,8 @@ export default function GameCanvas(props) {
           display: "block",
           margin: "20px auto",
           imageRendering: "pixelated",
+          borderRadius: "12px",
+          boxShadow: "0 4px 32px #000a",
         }}
       />
     </div>

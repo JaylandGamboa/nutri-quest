@@ -14,7 +14,9 @@ const menuBtnStyle = {
 
 class MainMenu extends React.Component {
   render() {
-    const { onStart, onHowToPlay, onQuit } = this.props
+    // FIX: Add onSettings to the destructuring
+    const { onStart, onSettings, onHowToPlay, onQuit, onCollectibles } =
+      this.props
     return (
       <div
         style={{
@@ -32,9 +34,7 @@ class MainMenu extends React.Component {
         <button style={menuBtnStyle} onClick={onStart}>
           Start Game
         </button>
-        <button style={menuBtnStyle} onClick={onHowToPlay}>
-          How to Play
-        </button>
+        <button onClick={onCollectibles}>Collectibles</button>
         <button style={menuBtnStyle} onClick={onQuit}>
           Quit
         </button>

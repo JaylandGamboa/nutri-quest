@@ -3,18 +3,20 @@ import React from "react"
 const worlds = [
   {
     key: "world1",
-    name: "Green Meadows",
-    description: "A lush, vibrant land full of fresh veggies.",
+    name: "World 1: Go Unhealthy City",
+    description: "A city filled with junk food and sugary snacks.",
   },
   {
     key: "world2",
-    name: "Fruit Forest",
-    description: "A sweet and colorful forest of fruits.",
+    name: "World 2: Junk Factory",
+    description:
+      "A factory filled with processed foods and unhealthy snacks. (Coming Soon)",
   },
   {
     key: "world3",
-    name: "Protein Peaks",
-    description: "Mountains where strength is forged.",
+    name: "World 3: Food Junkie Corporation Headquarters",
+    description:
+      "A corporate headquarters filled with unhealthy food options. (Coming Soon)",
   },
 ]
 

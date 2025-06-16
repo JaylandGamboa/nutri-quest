@@ -1,6 +1,6 @@
 import React from "react"
 
-export default function Win({ onRestart, onMenu }) {
+export default function Win({ onRestart, onMenu, isLastLevel }) {
   return (
     <div style={{ textAlign: "center", color: "#fff", marginTop: 60 }}>
       <h1>🏆 You Win!</h1>
@@ -9,7 +9,7 @@ export default function Win({ onRestart, onMenu }) {
         style={{ margin: 10, padding: "10px 30px", fontSize: "1.1em" }}
         onClick={onRestart}
       >
-        Play Again
+        {isLastLevel ? "Finish Game" : "Next Level"}
       </button>
       <button
         style={{ margin: 10, padding: "10px 30px", fontSize: "1.1em" }}
