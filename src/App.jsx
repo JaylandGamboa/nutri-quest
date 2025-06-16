@@ -106,6 +106,7 @@ export default function App() {
         isMuted={isMuted}
         volume={volume}
         onMenu={() => setScreen("menu")}
+        style={{ height: "100vh" }}
       />
     )
   if (screen === "win")
